@@ -4,7 +4,6 @@ library(httr)
 
 
 source('config.R')
-
 TEXT_AREA_START_HEIGHT <- 200
 
 
@@ -17,7 +16,8 @@ ui <- pageWithSidebar(
     
     actionButton('load_sample_text', 'load sample'),
     
-    textAreaInput('input_text', 'Your text:', height=TEXT_AREA_START_HEIGHT),
+    textAreaInput('input_text', 'Your text:', 
+                  height=TEXT_AREA_START_HEIGHT),
     
     actionButton('submit', 'Vizualize text')
   ),
@@ -57,12 +57,33 @@ server <- function(input, output) {
   })
   
   observeEvent(input$load_sample_text, {
+    text <- tryCatch({
+      get_text_by_name(input$sample_text)
+    }, error={
+      showModal(modalDialog(
+        title = "Error",
+        'Connection error',
+        easyClose = TRUE,
+        footer = NULL
+      ))
+      return()
+    })
     updateTextAreaInput(inputId='input_text', 
-                        value=get_text_by_name(input$sample_text))
+                        value=text)
   })
   
   observeEvent(input$submit, {
-    wordscodes <- encode_text(input$input_text)
+    tryCatch({
+      wordscodes <- encode_text(input$input_text)
+    }, error={
+      showModal(modalDialog(
+        title = "Error",
+        'Connection error',
+        easyClose = TRUE,
+        footer = NULL
+      ))
+      return()
+    })
     
     num_codes = length(wordscodes$codes)
     codes_matrix = matrix(unlist(wordscodes$codes), num_codes)
@@ -70,7 +91,6 @@ server <- function(input, output) {
     pca_res = prcomp(x=codes_matrix, rank=2)
     
     reduced_codes = pca_res$x
-    
     colnames(reduced_codes) <- c('X', 'Y')
     
     encoded_words = data.frame(reduced_codes)
