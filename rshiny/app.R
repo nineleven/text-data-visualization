@@ -93,11 +93,11 @@ server <- function(input, output) {
     }
     
     num_codes = length(wordscodes$codes)
-    codes_matrix = matrix(unlist(wordscodes$codes), num_codes)
+    codes_matrix = matrix(data=unlist(wordscodes$codes), nrow=num_codes, byrow=TRUE)
     
-    pca_res = prcomp(x=codes_matrix, rank=2)
+    res.pca = prcomp(x=codes_matrix, rank=2)
     
-    reduced_codes = pca_res$x
+    reduced_codes = res.pca$x
     colnames(reduced_codes) <- c('X', 'Y')
     
     encoded_words = data.frame(reduced_codes)
@@ -106,7 +106,7 @@ server <- function(input, output) {
     output$wordsPlot <- renderPlotly({
       
       plot_ly(encoded_words, x=~X, y=~Y, text=~W, 
-              type='scatter', mode='markers', hoverinfo='test')
+              type='scatter', mode='markers')
     })
   })
   
