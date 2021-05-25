@@ -1,4 +1,6 @@
 __pycache__
 
+/server/api/migrations
+
 .ipynb_checkpoints
 *.ipynb
