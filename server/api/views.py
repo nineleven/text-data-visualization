@@ -2,15 +2,22 @@ from django.shortcuts import render
 from django.http import JsonResponse, HttpResponseNotFound
 from django.views.decorators.csrf import csrf_exempt
 
+from .models import SampleText
+
 from .logic import encode_text
 
 # Create your views here.
 
 def get_available_texts_view(request):
-    return JsonResponse({'context': ['text1', 'text2']})
+    texts = SampleText.objects.all()
+    return JsonResponse({'context': [text.name for text in texts]})
     
-def get_text_view(request, text_name):
-    return JsonResponse({'context': 'test text'})
+def get_text_view(request):
+    if request.method == 'GET':
+        text_name = request.GET['name'].replace('+', ' ')
+        text = SampleText.objects.filter(name__startswith=text_name)[0]
+        return JsonResponse({'context': text.text})
+    return HttpResponseNotFound('Please, use GET method')
 
 @csrf_exempt
 def encode_text_view(request):

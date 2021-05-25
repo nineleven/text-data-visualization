@@ -34,8 +34,9 @@ get_available_texts <- function() {
 }
 
 get_text_by_name <- function(text_name) {
-  url <- paste(GET_TEXT_BY_NAME_URL, text_name, sep='')
-  response <- GET(url)
+  no_spaces_name = gsub(' ', '+', text_name)
+  url <- GET_TEXT_BY_NAME_URL
+  response <- GET(url, query=list(name=no_spaces_name))
   json_data <- content(response, as='parsed')
   return(json_data$context)
 }
@@ -52,6 +53,7 @@ server <- function(input, output) {
     get_available_texts()
   })
   
+  
   output$sample_text <- renderUI({
     selectInput('sample_text', 'Sample texts:', available_texts())
   })
@@ -59,31 +61,36 @@ server <- function(input, output) {
   observeEvent(input$load_sample_text, {
     text <- tryCatch({
       get_text_by_name(input$sample_text)
-    }, error={
+    }, error= function(e){
       showModal(modalDialog(
         title = "Error",
-        'Connection error',
+        paste('Connection error:', e),
         easyClose = TRUE,
         footer = NULL
       ))
-      return()
     })
+    if (is.null(text)) {
+      return()
+    }
+
     updateTextAreaInput(inputId='input_text', 
                         value=text)
   })
   
   observeEvent(input$submit, {
-    tryCatch({
-      wordscodes <- encode_text(input$input_text)
-    }, error={
+    wordscodes <- tryCatch({
+      encode_text(input$input_text)
+    }, error = function(e){
       showModal(modalDialog(
         title = "Error",
-        'Connection error',
+        paste('Connection error:', e),
         easyClose = TRUE,
         footer = NULL
       ))
-      return()
     })
+    if (is.null(wordscodes)) {
+      return()
+    }
     
     num_codes = length(wordscodes$codes)
     codes_matrix = matrix(unlist(wordscodes$codes), num_codes)
