@@ -3,11 +3,9 @@ library(plotly)
 library(httr)
 
 
-TEXT_AREA_START_HEIGHT <- 200
+source('config.R')
 
-GET_AVAILABLE_TEXTS_URL <- 'http://127.0.0.1:8000/api/get_available_texts/'
-GET_TEXT_BY_NAME_URL <- 'http://127.0.0.1:8000/api/get_text/'
-ENCODE_TEXT_URL <- 'http://127.0.0.1:8000/api/encode_text/'
+TEXT_AREA_START_HEIGHT <- 200
 
 
 ui <- pageWithSidebar(
