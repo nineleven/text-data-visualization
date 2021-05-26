@@ -32,6 +32,11 @@ python server/manage.py migrate
 ```
 
 ## Examples
+### Running locally
+Start a django server with
+```
+python server/manage.py runserver
+```
 Run
 ```
 R -e shiny::runApp('rshiny/app.R')
