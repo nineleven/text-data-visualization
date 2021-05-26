@@ -42,11 +42,9 @@ def encode_word(word):
         try:
             idx = alphabeth.index(c.lower())
         except ValueError:
-            print(f"warning: unknown symbol '{c}'")
+            # unknown symbol
             continue
         code[idx] += 1
-        
-    total_characters = sum(code)
         
     return code
             
@@ -58,7 +56,6 @@ def encode_text(text):
         code = encode_word(word)
         words.append(word)
         codes.append(code)
-        
         
     return words, codes
 
