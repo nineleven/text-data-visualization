@@ -27,6 +27,7 @@ ui <- pageWithSidebar(
   )
 )
 
+
 get_available_texts <- function() {
   response <- GET(GET_AVAILABLE_TEXTS_URL)
   json_data <- content(response, as='parsed')
@@ -48,11 +49,11 @@ encode_text <- function(text) {
   return(json_data)
 }
 
+
 server <- function(input, output) {
   available_texts <- reactive({
     get_available_texts()
   })
-  
   
   output$sample_text <- renderUI({
     selectInput('sample_text', 'Sample texts:', available_texts())
