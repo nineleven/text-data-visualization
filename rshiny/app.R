@@ -29,12 +29,14 @@ ui <- pageWithSidebar(
 
 
 get_available_texts <- function() {
+  "Requests a list of available sample texts"
   response <- GET(GET_AVAILABLE_TEXTS_URL)
   json_data <- content(response, as='parsed')
   return(json_data$context)
 }
 
 get_text_by_name <- function(text_name) {
+  "Requests a sample text by it\'s name"
   no_spaces_name = gsub(' ', '+', text_name)
   url <- GET_TEXT_BY_NAME_URL
   response <- GET(url, query=list(name=no_spaces_name))
@@ -43,6 +45,7 @@ get_text_by_name <- function(text_name) {
 }
 
 encode_text <- function(text) {
+  "Accesses API that encodes the text"
   response <- POST(ENCODE_TEXT_URL,
                    body = text)
   json_data <- content(response, as='parsed')
