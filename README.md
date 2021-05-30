@@ -7,7 +7,7 @@ The program consists of two parts. RShiny client takes an arbitrary text from us
 ### Python
 After cloning the repository, run
 ```
-pip install -r requirement.txt
+pip install -r requirements.txt
 ```
 ### R
 Install R from https://www.r-project.org/
