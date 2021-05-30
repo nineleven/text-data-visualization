@@ -7,9 +7,38 @@ The program consists of two parts. RShiny client takes an arbitrary text from us
 ### Python
 After cloning the repository, run
 ```
-pip install -r requirement.txt
+pip install -r requirements.txt
 ```
 ### R
-install R from https://www.r-project.org/
+Install R from https://www.r-project.org/
+
+Install required R packages with
+```
+R -e install.packages(c('shiny', 'plotly', 'httr'))
+```
+### PostgreSQL
+Install PostgreSQL from https://www.postgresql.org/
+
+Create a database that corrsponds to DATABASES dictionary in [textviz/settings.py](textviz/settings.py)
+
+### Setup django
+Run
+```
+python server/manage.py makemigrations
+```
+and
+```
+python server/manage.py migrate
+```
 
 ## Examples
+### Running locally
+Start a django server with
+```
+python server/manage.py runserver
+```
+Run
+```
+R -e shiny::runApp('rshiny/app.R')
+```
+This should output you the url address of the appliction.
