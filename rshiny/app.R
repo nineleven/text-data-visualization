@@ -17,7 +17,7 @@ ui <- pageWithSidebar(
     actionButton('load_sample_text', 'load sample'),
     
     textAreaInput('input_text', 'Your text:', 
-                  height=TEXT_AREA_START_HEIGHT),
+                  height = TEXT_AREA_START_HEIGHT),
     
     actionButton('submit', 'Vizualize text')
   ),
@@ -49,7 +49,7 @@ encode_text <- function(text) {
   "Accesses API that encodes the text"
   response <- POST(ENCODE_TEXT_URL,
                    body = text)
-  json_data <- content(response, as='parsed')
+  json_data <- content(response, as = 'parsed')
   return(json_data)
 }
 
@@ -78,8 +78,8 @@ server <- function(input, output) {
       return()
     }
 
-    updateTextAreaInput(inputId='input_text', 
-                        value=text)
+    updateTextAreaInput(inputId = 'input_text', 
+                        value = text)
   })
   
   observeEvent(input$submit, {
@@ -97,21 +97,22 @@ server <- function(input, output) {
       return()
     }
     
-    num_codes = length(wordscodes$codes)
-    codes_matrix = matrix(data=unlist(wordscodes$codes), nrow=num_codes, byrow=TRUE)
+    num_codes <- length(wordscodes$codes)
+    codes_matrix <- matrix(data = unlist(wordscodes$codes), 
+                           nrow = num_codes, byrow = TRUE)
     
-    res.pca = prcomp(x=codes_matrix, rank=2)
+    res.pca <- prcomp(x = codes_matrix, rank = 2)
     
     reduced_codes = res.pca$x
     colnames(reduced_codes) <- c('X', 'Y')
     
-    encoded_words = data.frame(reduced_codes)
-    encoded_words$W = wordscodes$words
+    encoded_words <- data.frame(reduced_codes)
+    encoded_words$W <- wordscodes$words
     
     output$wordsPlot <- renderPlotly({
       
-      plot_ly(encoded_words, x=~X, y=~Y, text=~W, 
-              type='scatter', mode='markers')
+      plot_ly(encoded_words, x = ~X, y = ~Y, text = ~W, 
+              type = 'scatter', mode = 'markers')
     })
   })
   
