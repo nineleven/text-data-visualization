@@ -32,7 +32,8 @@ get_available_texts <- function() {
   "Requests a list of available sample texts"
   response <- GET(GET_AVAILABLE_TEXTS_URL)
   json_data <- content(response, as='parsed')
-  return(json_data$context)
+  names <- sapply(json_data, function(elem){return(elem$name)})
+  return(names)
 }
 
 get_text_by_name <- function(text_name) {
@@ -41,7 +42,7 @@ get_text_by_name <- function(text_name) {
   url <- GET_TEXT_BY_NAME_URL
   response <- GET(url, query=list(name=no_spaces_name))
   json_data <- content(response, as='parsed')
-  return(json_data$context)
+  return(json_data$text)
 }
 
 encode_text <- function(text) {
