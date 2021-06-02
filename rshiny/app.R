@@ -14,7 +14,7 @@ ui <- pageWithSidebar(
   sidebarPanel(
     uiOutput('sample_text'),
     
-    actionButton('load_sample_text', 'load sample'),
+    uiOutput('load_sample_text'),
     
     textAreaInput('input_text', 'Your text:', 
                   height = TEXT_AREA_START_HEIGHT),
@@ -56,7 +56,13 @@ encode_text <- function(text) {
 
 server <- function(input, output) {
   available_texts <- reactive({
-    get_available_texts()
+    texts <- get_available_texts()
+    
+    output$load_sample_text <- renderUI({
+      actionButton('load_sample_text', 'load sample')
+    })
+  
+    return(texts)
   })
   
   output$sample_text <- renderUI({
