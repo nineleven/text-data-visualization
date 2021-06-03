@@ -104,6 +104,17 @@ server <- function(input, output) {
     }
     
     num_codes <- length(wordscodes$codes)
+    
+    if (num_codes < 2) {
+      showModal(modalDialog(
+        title = "Error",
+        paste('Please, enter at leat two words'),
+        easyClose = TRUE,
+        footer = NULL
+      ))
+      return()
+    }
+    
     codes_matrix <- matrix(data = unlist(wordscodes$codes), 
                            nrow = num_codes, byrow = TRUE)
     
